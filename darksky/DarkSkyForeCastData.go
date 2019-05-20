@@ -1,4 +1,4 @@
-package ColoradoWeatherMap
+package darksky
 
 func SampleData() string {
 	var data = `

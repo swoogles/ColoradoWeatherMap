@@ -1,4 +1,4 @@
-package ColoradoWeatherMap
+package darksky
 
 import (
 	"encoding/json"

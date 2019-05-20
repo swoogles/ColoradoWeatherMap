@@ -39,24 +39,18 @@ type ForeCast struct {
 type GpsCoordinates struct {
 	Latitude  float64
 	Longitude float64
+	Location  string
 }
 
 var myClient = &http.Client{Timeout: 10 * time.Second}
 
-//func getForeCastJson(url string) ForeCast {
-//}
-
-func getTestData(url string) ForeCast {
-	var decodedForeCast ForeCast
-	error := json.Unmarshal(json.RawMessage(SampleData()), &decodedForeCast)
-	if error != nil {
-		panic(error)
-	}
-	return decodedForeCast
-}
-
 func stringOf(coordinates GpsCoordinates) string {
 	return fmt.Sprintf("%f", coordinates.Latitude) + "," + fmt.Sprintf("%f", coordinates.Longitude)
+}
+
+func GetMultipleForecasts(darkSkyToken string, coordinates []GpsCoordinates) []ForeCast {
+	forecasts := []ForeCast{}
+	return forecasts
 }
 
 func GetBasicForecast(darkSkyToken string, coordinates GpsCoordinates, location string) ForeCast {
@@ -74,11 +68,10 @@ func GetBasicForecast(darkSkyToken string, coordinates GpsCoordinates, location 
 
 	defer resp3.Body.Close()
 	var weatherForecast ForeCast
-	json.NewDecoder(resp3.Body).Decode(&weatherForecast)
+	error = json.NewDecoder(resp3.Body).Decode(&weatherForecast)
+	if error != nil {
+		fmt.Println("Error decoding forecast: " + error.Error())
+	}
 	weatherForecast.Location = location
 	return weatherForecast
-}
-
-func main() {
-	fmt.Println("This is the weather project!")
 }
